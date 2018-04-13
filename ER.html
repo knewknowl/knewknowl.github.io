@@ -1,0 +1,101 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Tutorial 1: Getting Started</title>
+    <script src="./cytoscape/cytoscape.min.js"></script>
+</head>
+
+<style>
+    #cy {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+</style>
+
+<body>
+    <div id="cy"></div>
+    <script>
+      var cy = cytoscape({
+        container: document.getElementById('cy'),
+        elements: [],
+        style: [
+        {
+            selector: 'node',
+            style: {
+                'background-color': 'red',
+                width: 10,
+                height: 10
+            }
+        }]
+      });
+
+      var n=100;
+      var p=0.03;
+      var V=[];
+      var E=[];
+      for (var i=0; i<n; i++){
+          V.push('node'+i);
+      }
+      for (var i=0;i<n;i++){			 
+          for (var j=i+1;j<n;j++){
+              if(Math.random()<=p){
+                  E.push([V[i],V[j]]);
+              }
+          }
+      }
+
+      for (var i = 0; i < n; i++) {
+          cy.add({
+              data: { id: V[i] }
+              }
+          );
+      }
+
+      for (var i=0; i<E.length; i++){
+          [u,v]=E[i];
+          cy.add({
+              data: {
+                  id: 'edge'+i,
+                  source: u,
+                  target: v
+              }
+          });
+      }
+
+      cy.layout({				
+          name: 'cose',
+          ready: function(){},
+          stop: function(){},
+          animate: true,
+          animationEasing: undefined,
+          animationDuration: undefined,
+          animateFilter: function ( node, i ){ return true; },
+          animationThreshold: 250,
+          refresh: 20,
+          fit: true,
+          padding: 30,
+          boundingBox: undefined,
+          nodeDimensionsIncludeLabels: false,
+          randomize: false,
+          componentSpacing: 40,
+          nodeRepulsion: function( node ){ return 2048; },
+          nodeOverlap: 4,
+          idealEdgeLength: function( edge ){ return 32; },
+          edgeElasticity: function( edge ){ return 32; },
+          nestingFactor: 1.2,
+          gravity: 1,
+          numIter: 1000,
+          initialTemp: 1000,
+          coolingFactor: 0.99,
+          minTemp: 1.0,
+          weaver: false
+      }).run();
+
+    </script>
+</body>
+</html>
